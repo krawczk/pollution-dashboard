@@ -12,7 +12,7 @@ def get_gios_pollution_data():
     pollution_df = pd.DataFrame()
     station_data = _fetch_gios_station_data()
     # Filter the station data to remove extensive usage of data with getting all the stations
-    station_data = station_data.head(1)
+    station_data = station_data.head(10)
     daily_data = []
     today_date = datetime.now().strftime("%Y-%m-%d")
 
