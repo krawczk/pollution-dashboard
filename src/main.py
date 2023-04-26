@@ -1,5 +1,3 @@
-from arcgis.features import FeatureLayer
-
 from ArcGISHandler import ArcGISHandler, update_pollution_data_with_new_feature_set
 from gios_steps_definitions import get_gios_pollution_data
 

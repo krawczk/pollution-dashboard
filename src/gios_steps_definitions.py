@@ -1,7 +1,7 @@
-from datetime import datetime
+import logging
 from datetime import datetime, timedelta
 from typing import Union
-import logging
+
 import pandas as pd
 import requests
 
@@ -33,7 +33,8 @@ def get_gios_pollution_data(is_long=False):
         station_pollution_df.dropna(inplace=True)
 
         # Filter the date after obtaining all the data from sensor_ids for given station
-        station_pollution_df = station_pollution_df[station_pollution_df["date"].str.contains(today_date)].sort_values(by=["date"])
+        station_pollution_df = station_pollution_df[station_pollution_df["date"].str.contains(today_date)].sort_values(
+            by=["date"])
         station_pollution_df["date"] = pd.to_datetime(station_pollution_df["date"]).dt.strftime("%Y-%m-%dT%H:%M:%SZ")
 
         # Add station id and name to dataframe
@@ -44,11 +45,13 @@ def get_gios_pollution_data(is_long=False):
         lon = station_data["gegrLon"].iloc[0]
         for measure in station_pollution_df["measure"]:
             if measure in MEASURES:
-                station_pollution_data_dict = {"Name": station_data[station_data["id"] == station_id]["stationName"].iloc[0],
-                                  "Date": datetime.now() - timedelta(hours=1), "LAT": lat, "LON": lon}
+                station_pollution_data_dict = {
+                    "Name": station_data[station_data["id"] == station_id]["stationName"].iloc[0],
+                    "Date": datetime.now() - timedelta(hours=1), "LAT": lat, "LON": lon}
                 if is_long:
                     station_pollution_data_dict["Measure"] = measure
-                    station_pollution_data_dict["Pollution_Value"] = station_pollution_df[station_pollution_df["measure"] == measure]["pollution_value"].values[0]
+                    station_pollution_data_dict["Pollution_Value"] = \
+                    station_pollution_df[station_pollution_df["measure"] == measure]["pollution_value"].values[0]
                 else:
                     df_filtered_by_measure = station_pollution_df[station_pollution_df["measure"] == measure]
                     station_pollution_data_dict[measure] = df_filtered_by_measure["pollution_value"].values[0]

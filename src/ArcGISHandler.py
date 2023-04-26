@@ -4,7 +4,7 @@ from typing import Union
 import pandas as pd
 import requests
 from arcgis import GIS
-from arcgis.features import FeatureSet, FeatureLayer
+from arcgis.features import FeatureLayer
 
 from config import USERNAME, PASSWORD, POLLUTION_MAP_ID, POLLUTION_DATA_ID, POLLUTION_DASHBOARD_ID, \
     POLLUTION_DATA_LONG_ID
