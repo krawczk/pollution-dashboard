@@ -9,35 +9,29 @@ from arcgis.features import FeatureSet, FeatureLayer
 from config import USERNAME, PASSWORD, POLLUTION_MAP_ID, POLLUTION_DATA_ID, POLLUTION_DASHBOARD_ID
 
 
-def get_feature_set_from_pollution_data(pollution_df) -> list:
+def get_feature_set_from_pollution_data(pollution_df, is_long=False) -> list:
     feature_set = []
     for index, row in pollution_df.iterrows():
-        # Get the data for the current row
-        name = row["Name"]
-        date = row["Date"]
-        lat = row["LAT"]
-        lon = row["LON"]
-        pm10 = row.get("PM10")
-        pm25 = row.get("PM2.5")
-        so2 = row.get("SO2")
-        no2 = row.get("NO2")
-        co = row.get("CO")
+        attributes = {
+            "Name": row.get("Name"),
+            "Date": row.get("Date"),
+            "LAT": row.get("LAT"),
+            "LON": row.get("LON"),
+        }
+
+        if is_long:
+            attributes["MEASURE"] = row.get("MEASURE")
+        else:
+            attributes["PM10"] = row.get("PM10")
+            attributes["PM25"] = row.get("PM25")
+            attributes["SO2"] = row.get("SO2")
+            attributes["NO2"] = row.get("NO2")
 
         feature_set.append({
-            "attributes": {
-                "Name": name,
-                "Date": date,
-                "LAT": lat,
-                "LON": lon,
-                "PM10": pm10,
-                "PM25": pm25,
-                "CO": co,
-                "SO2": so2,
-                "NO2": no2
-            },
+            "attributes": attributes,
             "geometry": {
-                "x": lon,
-                "y": lat,
+                "x": row.get("LON"),
+                "y": row.get("LAT"),
                 "spatialReference": {
                     "wkid": 4326
                 }
