@@ -82,6 +82,6 @@ class ArcGISHandler:
 
     def get_pollution_dashboard(self) -> pd.DataFrame:
         pollution_dashboard = self.gis.content.get(POLLUTION_DASHBOARD_ID)
-        assert pollution_dashboard.title == "Pollution Map"
+        assert pollution_dashboard.title == "Pollution Dashboard"
         assert pollution_dashboard.owner == "krawczyk_agh_ust"
         return pollution_dashboard
