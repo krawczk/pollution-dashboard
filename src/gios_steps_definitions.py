@@ -1,7 +1,7 @@
 from datetime import datetime
 from datetime import datetime
 from typing import Union
-
+import logging
 import pandas as pd
 import requests
 
@@ -11,10 +11,8 @@ from config import MEASURES
 def get_gios_pollution_data():
     pollution_df = pd.DataFrame()
     station_data = _fetch_gios_station_data()
-    # Filter the station data to remove extensive usage of data with getting all the stations
-    station_data = station_data.head(10)
     daily_data = []
-    today_date = datetime.now().strftime("%Y-%m-%d")
+    today_date = datetime.now().strftime("%Y-%m-%d %H")
 
     for station_id in station_data["id"]:
         station_df = pd.DataFrame()
@@ -23,7 +21,9 @@ def get_gios_pollution_data():
         except KeyError:
             pass
         for sensor_id in sensors_id:
-            sensor_data = _fetch_gios_data(sensor_id)
+            sensor_data = _fetch_gios_pollution_data_from_sensor(sensor_id)
+            if not isinstance(sensor_data, pd.DataFrame):
+                logging.warning(f"No available sensor data for given {station_id}")
             sensor_data.rename(columns={"key": "measure", "value": "pollution_value"}, inplace=True)
             station_df = pd.concat([station_df, sensor_data])
 
@@ -71,7 +71,7 @@ def _fetch_gios_sensor_data(station_id: int) -> Union[pd.DataFrame, str]:
         return r.text
 
 
-def _fetch_gios_data(sensor_id: int) -> Union[pd.DataFrame, str]:
+def _fetch_gios_pollution_data_from_sensor(sensor_id: int) -> Union[pd.DataFrame, str]:
     r = requests.get(f"https://api.gios.gov.pl/pjp-api/rest/data/getData/{sensor_id}")
     if r.status_code == 200:
         df = pd.DataFrame(r.json())
