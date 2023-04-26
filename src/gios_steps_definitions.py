@@ -1,5 +1,5 @@
 from datetime import datetime
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Union
 import logging
 import pandas as pd
@@ -11,7 +11,8 @@ from config import MEASURES
 def get_gios_pollution_data(is_long=False):
     pollution_data = []
     all_station_data = _fetch_gios_all_station_data()
-    today_date = datetime.now().strftime("%Y-%m-%d %H")
+    all_station_data = all_station_data
+    today_date = (datetime.now() - timedelta(hours=1)).strftime("%Y-%m-%d %H")
 
     for station_id in all_station_data["id"]:
         station_data = all_station_data[all_station_data["id"] == station_id]
@@ -23,7 +24,8 @@ def get_gios_pollution_data(is_long=False):
         for sensor_id in sensors_id:
             sensor_data = _fetch_gios_pollution_data_from_sensor(sensor_id)
             if not isinstance(sensor_data, pd.DataFrame):
-                logging.warning(f"No available sensor data for given {station_id}")
+                logging.warning(f"No available sensor data for sensor {sensor_id} data for station {station_id}")
+                continue
             sensor_data.rename(columns={"key": "measure", "value": "pollution_value"}, inplace=True)
             station_pollution_df = pd.concat([station_pollution_df, sensor_data])
 
@@ -43,9 +45,10 @@ def get_gios_pollution_data(is_long=False):
         for measure in station_pollution_df["measure"]:
             if measure in MEASURES:
                 station_pollution_data_dict = {"Name": station_data[station_data["id"] == station_id]["stationName"].iloc[0],
-                                  "Date": today_date, "LAT": lat, "LON": lon}
+                                  "Date": datetime.now() - timedelta(hours=1), "LAT": lat, "LON": lon}
                 if is_long:
-                    station_pollution_data_dict["MEASURE"] = measure
+                    station_pollution_data_dict["Measure"] = measure
+                    station_pollution_data_dict["Pollution_Value"] = station_pollution_df[station_pollution_df["measure"] == measure]["pollution_value"].values[0]
                 else:
                     df_filtered_by_measure = station_pollution_df[station_pollution_df["measure"] == measure]
                     station_pollution_data_dict[measure] = df_filtered_by_measure["pollution_value"].values[0]
@@ -75,6 +78,9 @@ def _fetch_gios_pollution_data_from_sensor(sensor_id: int) -> Union[pd.DataFrame
     if r.status_code == 200:
         df = pd.DataFrame(r.json())
         df = pd.concat([df, df["values"].apply(pd.Series)], axis=1).drop(columns="values")
-        return df
+        if "date" in df:
+            return df[df["date"].str.contains((datetime.now() - timedelta(hours=1)).strftime("%Y-%m-%d %H"))]
+        else:
+            return f"Sensor {sensor_id} updated with invalid date"
     else:
         return r.text

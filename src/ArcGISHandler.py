@@ -6,7 +6,8 @@ import requests
 from arcgis import GIS
 from arcgis.features import FeatureSet, FeatureLayer
 
-from config import USERNAME, PASSWORD, POLLUTION_MAP_ID, POLLUTION_DATA_ID, POLLUTION_DASHBOARD_ID
+from config import USERNAME, PASSWORD, POLLUTION_MAP_ID, POLLUTION_DATA_ID, POLLUTION_DASHBOARD_ID, \
+    POLLUTION_DATA_LONG_ID
 
 
 def get_feature_set_from_pollution_data(pollution_df, is_long=False) -> list:
@@ -20,7 +21,8 @@ def get_feature_set_from_pollution_data(pollution_df, is_long=False) -> list:
         }
 
         if is_long:
-            attributes["MEASURE"] = row.get("MEASURE")
+            attributes["Measure"] = row.get("Measure")
+            attributes["Pollution_Value"] = row.get("Pollution_Value")
         else:
             attributes["PM10"] = row.get("PM10")
             attributes["PM25"] = row.get("PM25")
@@ -55,8 +57,8 @@ def post_pollution_data_to_arcgis_online(pollution_df: pd.DataFrame, feature_ser
         return f"Error adding feature: {response.status_code} {response.reason}"
 
 
-def update_pollution_data_with_new_feature_set(pollution_df, pollution_data_feature):
-    new_feature_set = get_feature_set_from_pollution_data(pollution_df)
+def update_pollution_data_with_new_feature_set(pollution_df, pollution_data_feature, is_long=False):
+    new_feature_set = get_feature_set_from_pollution_data(pollution_df, is_long)
     assert new_feature_set, "Empty feature set"
     pollution_data_feature.edit_features(adds=new_feature_set)
 
@@ -67,9 +69,10 @@ class ArcGISHandler:
     def __init__(self):
         pass
 
-    def get_pollution_data_feature_layer(self) -> pd.DataFrame:
-        pollution_data_feature_item = self.gis.content.get(POLLUTION_DATA_ID)
-        assert pollution_data_feature_item.title == "Pollution Data"
+    def get_pollution_data_feature_layer(self, is_long=False) -> pd.DataFrame:
+        pollution_data_id = POLLUTION_DATA_LONG_ID if is_long else POLLUTION_DATA_ID
+        pollution_data_feature_item = self.gis.content.get(pollution_data_id)
+        assert pollution_data_feature_item.title == "Pollution Data Long"
         assert pollution_data_feature_item.owner == "krawczyk_agh_ust"
         pollution_data_feature_layer = FeatureLayer(pollution_data_feature_item.layers[0].url, self.gis)
         return pollution_data_feature_layer
