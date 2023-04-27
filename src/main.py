@@ -1,9 +1,21 @@
+import logging
+from datetime import datetime
+
 from ArcGISHandler import ArcGISHandler, update_pollution_data_with_new_feature_set
 from gios_steps_definitions import get_gios_pollution_data
 
+# TODO THINK ABOUT DAILY AVERAGE
+# TODO THINK ABOUT AGGREGATING STATION DATA
+# TODO REFACTOR INTO CLASSES
+# TODO PIPELINES?
+# TODO SETUP THRESHOLDS IN OKNA PODRECZNE
+# TODO SERVER?
+# TODO AUTOMATICALLY RUNNING? PIPELINE?
+# TODO EMBED ON SITE FIX INDEX AND SCRIPT
+# TODO FIX ACCOUNTS
+
 if __name__ == "__main__":
-    print("Starting to execute script")
-    # token = generate_oauth_token(CLIENT_ID, CLIENT_SECRET)
+    logging.info(f"Starting to execute script - {datetime.now()}")
     pollution_df = get_gios_pollution_data(is_long=True)
 
     arcgis_handler = ArcGISHandler()
@@ -16,5 +28,4 @@ if __name__ == "__main__":
 
     update_pollution_data_with_new_feature_set(pollution_df, pollution_data_feature_layer, is_long=True)
 
-    # response = post_station_data_to_arcgis_online(pollution_df, FEATURE_SERVICE_URL, token)
-    print("Script executed successfully")
+    logging.info(f"Finished executing script - {datetime.now()}")
