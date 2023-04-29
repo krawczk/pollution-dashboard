@@ -1,8 +1,10 @@
 import logging
 from datetime import datetime, timedelta
 from typing import Union
+
 import pandas as pd
 import requests
+
 from config import MEASURES
 
 
@@ -68,7 +70,8 @@ def _fetch_gios_pollution_data_from_sensor(sensor_id: int) -> Union[pd.DataFrame
         df = pd.concat([df, df["values"].apply(pd.Series)], axis=1).drop(columns="values")
         if "date" in df:
             current_day = datetime.now().strftime("%Y-%m-%d")
-            df = df[(df["date"] > current_day) & (df["date"] < (datetime.now() - timedelta(hours=1)).strftime("%Y-%m-%d %H"))]
+            df = df[(df["date"] > current_day) & (
+                        df["date"] < (datetime.now() - timedelta(hours=1)).strftime("%Y-%m-%d %H"))]
             df_to_report = df.groupby(["key"]).mean(numeric_only=True).reset_index()
             df_to_report["date"] = current_day
             return df_to_report
