@@ -4,8 +4,6 @@ from datetime import datetime
 from ArcGISHandler import ArcGISHandler, update_pollution_data_with_new_feature_set
 from gios_steps_definitions import get_gios_pollution_data
 
-# TODO THINK ABOUT DAILY AVERAGE
-# TODO THINK ABOUT AGGREGATING STATION DATA
 # TODO REFACTOR INTO CLASSES
 # TODO PIPELINES?
 # TODO SETUP THRESHOLDS IN OKNA PODRECZNE
