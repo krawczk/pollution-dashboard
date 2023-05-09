@@ -26,6 +26,9 @@ def get_gios_pollution_data(is_long=False):
                 continue
             station_pollution_df = pd.concat([station_pollution_df, sensor_data])
 
+        if station_pollution_df.empty:
+            logging.warning(f"No available station data for station {station_id}")
+            continue
         station_pollution_df["date"] = pd.to_datetime(station_pollution_df["date"]).dt.strftime("%Y-%m-%d")
         station_pollution_df["name"] = station_data["stationName"].iloc[0]
         lat = station_data["gegrLat"].iloc[0]
@@ -72,10 +75,12 @@ def _fetch_gios_pollution_data_from_sensor(sensor_id: int) -> Union[pd.DataFrame
             current_day = datetime.now().strftime("%Y-%m-%d")
             df = df[(df["date"] > current_day) & (
                         df["date"] < (datetime.now() - timedelta(hours=1)).strftime("%Y-%m-%d %H"))]
+            if all(df["key"] == 'CO'):
+                df['value'] = df['value'].div(1000).round(2)
             df_to_report = df.groupby(["key"]).mean(numeric_only=True).reset_index()
             df_to_report["date"] = current_day
             return df_to_report
         else:
-            return f"Sensor {sensor_id} updated with invalid date"
+            return f"Sensor {sensor_id} - invalid data"
     else:
         return r.text

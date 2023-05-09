@@ -4,10 +4,6 @@ from datetime import datetime
 from ArcGISHandler import ArcGISHandler, update_pollution_data_with_new_feature_set
 from gios_steps_definitions import get_gios_pollution_data
 
-# TODO REFACTOR INTO CLASSES
-# TODO PIPELINES?
-# TODO SETUP THRESHOLDS IN OKNA PODRECZNE
-# TODO SERVER?
 # TODO AUTOMATICALLY RUNNING? PIPELINE?
 # TODO EMBED ON SITE FIX INDEX AND SCRIPT
 # TODO FIX ACCOUNTS
