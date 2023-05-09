@@ -16,10 +16,6 @@ def main():
     # Handle ArcGIS operations
     arcgis_handler = ArcGISHandler()
 
-    pollution_map = arcgis_handler.get_pollution_map()
-    pollution_data_feature_layer = arcgis_handler.get_pollution_data_feature_layer(is_long=True)
-    pollution_dashboard = arcgis_handler.get_pollution_dashboard()
-
     # Delete all existing pollution data
     arcgis_handler.delete_all_pollution_data(is_long=True)
 

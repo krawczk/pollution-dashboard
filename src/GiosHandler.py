@@ -27,7 +27,6 @@ class GiosHandler:
                     logging.warning(f"No available sensor data for sensor {sensor_id} data for station {station_id}")
                     continue
                 station_pollution_df = pd.concat([station_pollution_df, sensor_data])
-
             if station_pollution_df.empty:
                 logging.warning(f"No available station data for station {station_id}")
                 continue
