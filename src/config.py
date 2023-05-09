@@ -1,5 +1,7 @@
 import os
 
+USERNAME = os.environ.get("USERNAME")
+PASSWORD = os.environ.get("PASSWORD")
 TOKEN = os.environ.get("TOKEN")
 FEATURE_SERVICE_URL = os.environ.get("FEATURE_SERVICE_URL")
 CLIENT_ID = os.environ.get("CLIENT_ID")
@@ -10,5 +12,4 @@ POLLUTION_DATA_ID = "d5703d6f77e34677a9522672f9f9ceaf"
 POLLUTION_DASHBOARD_ID = "a0282ed76e40452c8be25ff9711a9114"
 POLLUTION_DATA_LONG_ID = "d19db9b2876549e2b8e2de25ba52c5a8"
 
-USERNAME = os.environ.get("USERNAME")
-PASSWORD = os.environ.get("PASSWORD")
+
