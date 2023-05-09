@@ -45,21 +45,6 @@ class ArcGISHandler:
         return feature_set
 
     @staticmethod
-    def post_pollution_data_to_arcgis_online(pollution_df: pd.DataFrame, feature_service_url: str, token: str) -> Union[
-        dict, str]:
-        feature_set = pollution_df.get_feature_set_from_pollution_data(pollution_df)
-        data = {
-            "f": "json",
-            "token": token,
-            "features": json.dumps(feature_set)
-        }
-        response = requests.post(feature_service_url + "/addFeatures", data=data)
-        if response.status_code == 200:
-            return response.json()
-        else:
-            return f"Error adding feature: {response.status_code} {response.reason}"
-
-    @staticmethod
     def update_pollution_data_with_new_feature_set(pollution_df, pollution_data_feature, is_long=False):
         new_feature_set = ArcGISHandler.get_feature_set_from_pollution_data(pollution_df, is_long)
         assert new_feature_set, "Empty feature set"
