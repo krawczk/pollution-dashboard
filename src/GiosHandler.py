@@ -1,8 +1,10 @@
 import logging
 from datetime import datetime, timedelta
 from typing import Union
+
 import pandas as pd
 import requests
+
 from config import MEASURES
 
 
@@ -75,7 +77,7 @@ class GiosHandler:
             if "date" in df:
                 current_day = datetime.now().strftime("%Y-%m-%d")
                 df = df[(df["date"] > current_day) & (
-                            df["date"] < (datetime.now() - timedelta(hours=1)).strftime("%Y-%m-%d %H"))]
+                        df["date"] < (datetime.now() - timedelta(hours=1)).strftime("%Y-%m-%d %H"))]
                 if all(df["key"] == 'CO'):
                     df['value'] = df['value'].div(1000).round(2)
                 df_to_report = df.groupby(["key"]).mean(numeric_only=True).reset_index()
