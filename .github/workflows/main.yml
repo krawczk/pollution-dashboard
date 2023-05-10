@@ -18,11 +18,13 @@ jobs:
       with:
         miniconda-version: "latest"
         activate-environment: my-environment
-        python-version: '3.9'
+        python-version: 3.9
         auto-update-conda: true
 
     - name: Install dependencies
       run: |
+        conda create -y -n my-environment python=3.9
+        conda activate my-environment
         conda install -y -c esri arcgis pandas keyring
 
     - name: Run Python app
