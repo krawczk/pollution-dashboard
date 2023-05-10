@@ -2,7 +2,8 @@ name: Pollution Automation
 
 on:
   schedule:
-    - cron: '0 */24 * * *' # Run every 24 hours
+    - cron: '0 */21 * * *' # Run daily at 21:00 UTC
+  workflow_dispatch:
 
 jobs:
   run-python-app:
