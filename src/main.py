@@ -6,7 +6,7 @@ from GiosHandler import GiosHandler
 
 
 def main():
-    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s', filename='logs/app.log')
     logging.info(f"Starting to execute script - {datetime.now()}")
 
     # Get GIOS pollution data
