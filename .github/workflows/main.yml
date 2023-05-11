@@ -28,3 +28,6 @@ jobs:
 
     - name: Run Python app
       run: conda run -n my-environment python src/main.py
+      env:
+        USERNAME: ${{ secrets.USERNAME }}
+        PASSWORD: ${{ secrets.PASSWORD }}
