@@ -15,6 +15,8 @@ class GiosHandler:
     def get_pollution_data(self, is_long=False) -> pd.DataFrame:
         pollution_data = []
         all_station_data = self._fetch_all_station_data()
+        # TODO - only for test purpose
+        all_station_data = all_station_data.head()
         for station_id in all_station_data["id"]:
             station_data = all_station_data[all_station_data["id"] == station_id]
             station_pollution_df = pd.DataFrame()
