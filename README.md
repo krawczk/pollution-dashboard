@@ -3,6 +3,8 @@ Pollution Data Automated Dashboard
 
 The automated pollution data dashboard project aims to provide daily updates on pollution levels in Poland by retrieving data from the GIOS (Chief Inspectorate for Environmental Protection) website. This comprehensive dashboard utilizes various technologies such as pandas, ArcGIS API, ArcGIS Online, ArcGIS Dashboards, GitHub Actions, and GitHub Pages to collect, process, and present pollution data. The primary focus is on monitoring pollutants such as CO, SO2, NO2, and the critical PM2.5 and PM10 particles. The dashboard incorporates predefined thresholds to indicate whether pollution levels in different regions of Poland exceed or remain below the set standards.
 
+Dashboard Link - https://krawczykaghust.github.io/pollution-dashboard/
+
 Dashboard Components:
 
 - Data Source: The GIOS website (https://www.gov.pl/web/gios) serves as the primary data source for the pollution measurements. It provides reliable and up-to-date information on various pollutants across different monitoring stations in Poland.
